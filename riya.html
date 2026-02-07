@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Rose Day 🌹</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffccd5, #fff0f3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #a4133c;
+      font-size: 2.3rem;
+      margin-bottom: 30px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 14px 30px;
+      font-size: 1.1rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    #yesBtn {
+      background: #ff4d6d;
+      color: white;
+      box-shadow: 0 10px 20px rgba(255, 77, 109, 0.45);
+    }
+
+    #yesBtn:hover {
+      box-shadow: 0 14px 28px rgba(255, 77, 109, 0.65);
+    }
+
+    #noBtn {
+      background: #ffffff;
+      color: #a4133c;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      position: fixed;
+    }
+
+    /* SUCCESS PAGE */
+    .success {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #ffb3c1, #ffe5ec);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .success h2 {
+      font-size: 2.4rem;
+      color: #800f2f;
+      margin-bottom: 10px;
+    }
+
+    .success p {
+      font-size: 1.2rem;
+      color: #590d22;
+    }
+
+    .rose {
+      font-size: 3.2rem;
+      animation: float 1.6s infinite ease-in-out;
+      margin-bottom: 15px;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+      100% { transform: translateY(0); }
+    }
+
+    .petal {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: pink;
+      border-radius: 50%;
+      animation: fall 3s linear infinite;
+      opacity: 0.85;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100vh) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Riyaa, will you accept my Rose? 🌹</h1>
+    <div class="buttons">
+      <button id="yesBtn">Yes 🌹</button>
+      <button id="noBtn">No 💔</button>
+    </div>
+  </div>
+
+  <div class="success" id="successPage">
+    <div class="rose">🌹</div>
+    <h2>Yay Riyaa! This rose is forever yours 💕</h2>
+    <p>Happy Rose Day 🌹</p>
+  </div>
+
+  <!-- SOUNDS -->
+  <audio id="whooshSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-fast-small-sweep-transition-166.mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="successSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-magical-coin-win-1936.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const whoosh = document.getElementById("whooshSound");
+    const successSound = document.getElementById("successSound");
+
+    function playWhoosh() {
+      whoosh.currentTime = 0;
+      whoosh.play().catch(() => {});
+    }
+
+    function moveNoButton() {
+      playWhoosh();
+
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+
+      const maxX = window.innerWidth - btnWidth;
+      const maxY = window.innerHeight - btnHeight;
+
+      noBtn.style.left = Math.random() * maxX + "px";
+      noBtn.style.top = Math.random() * maxY + "px";
+    }
+
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("touchstart", e => {
+      e.preventDefault();
+      moveNoButton();
+    });
+    noBtn.addEventListener("click", e => {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    document.getElementById("yesBtn").addEventListener("click", () => {
+      successSound.play();
+      document.querySelector(".container").style.display = "none";
+      document.getElementById("successPage").style.display = "flex";
+      createPetals();
+    });
+
+    function createPetals() {
+      for (let i = 0; i < 30; i++) {
+        const p = document.createElement("div");
+        p.className = "petal";
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.background = `hsl(${350 + Math.random() * 20}, 80%, 70%)`;
+        p.style.animationDuration = (2.5 + Math.random() * 2) + "s";
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 4500);
+      }
+    }
+
+    moveNoButton();
+  </script>
+
+</body>
+</html>
